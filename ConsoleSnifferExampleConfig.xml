@@ -1,0 +1,67 @@
+<!--
+	This is an example configuration file for ConsoleSniffer.
+-->
+
+<configuration active="true">
+
+	<blockingInput value="false" />
+	<blockingOutput value="false" />
+	<logFile location="./log.txt" />
+	<applicationFile location="C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\import\gnu\arm\4.9.3\bin\arm-none-eabi-gdb.exe" />
+
+	<inputManipulation>
+		<if contains="monitor reset run">
+			<replace original="monitor reset run" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+		<elseif contains="monitor delay 3000">
+			<replace original="monitor delay 3000" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<elseif contains="monitor halt">
+			<replace original="monitor halt" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<elseif contains="-gdb-set --thread-group i1 language c">
+			<replace original="-gdb-set --thread-group i1 language c" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<elseif contains="-interpreter-exec --thread-group i1 console &quot;p/x (char)-1&quot;">
+			<replace original="-interpreter-exec --thread-group i1 console &quot;p/x (char)-1&quot;" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<elseif contains="-gdb-set --thread-group i1 language auto">
+			<replace original="-gdb-set --thread-group i1 language auto" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<elseif contains="-list-thread-groups">
+			<replace original="-list-thread-groups" new="^done,groups=[{id=&quot;i1&quot;,type=&quot;process&quot;,pid=&quot;42000&quot;,executable=&quot;D:\Documents\PSoC Creator\BasicDesign01\HelloWorld_Blinky01.cydsn\CortexM3\ARM_GCC_493\Debug\HelloWorld_Blinky01.elf&quot;}]" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<elseif contains="-thread-info 0">
+			<replace original="-thread-info 0" new="^done" />
+			<echoInput value="true" />
+			<blockInput value="true" />
+			</elseif>
+		<else>
+			<if contains="-exec-run">
+				<replace original="-exec-run" new="-exec-continue" />
+			</if>
+			<if contains="--thread 0">
+				<replace original="--thread 0" new="--thread 1" />
+			</if>
+			</else>
+		</if>
+	</inputManipulation>
+	
+	<outputManipulation>
+		<mockOutput value="OK" />
+	</outputManipulation>
+
+</configuration>
