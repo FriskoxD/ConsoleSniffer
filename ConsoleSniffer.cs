@@ -187,7 +187,7 @@ namespace FriskoxD.ConsoleSniffer
 
             };
 
-            while (true)
+            while (!_application.HasExited)
             {
                 input = Console.ReadLine();
                 WriteLogLineTimed(ConsoleSnifferText.logOriginalInput + input);
@@ -217,6 +217,8 @@ namespace FriskoxD.ConsoleSniffer
                 _singleInputBlock = false;
                 _mockingInput = false;
             };
+
+            WriteLogLineTimed(ConsoleSnifferText.logApplicationExited);
 
         }
         

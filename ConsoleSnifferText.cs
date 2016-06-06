@@ -75,6 +75,7 @@ namespace FriskoxD.ConsoleSniffer
         public const string logApplicationLocation     = "-Application location: ";
         public const string logConfigurationLoaction   = "-Configuration location: ";
         public const string logLogLocation             = "-Log location: ";
+        public const string logApplicationExited       = "Application has exited.";
 
         public const string xmlConfigurationTag         = "configuration";
         public const string xmlApplicationFileTag       = "applicationFile";
