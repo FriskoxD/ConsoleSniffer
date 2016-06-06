@@ -42,25 +42,27 @@ namespace FriskoxD.ConsoleSniffer
 
         bool ConsoleSnifferAction.Execute(ref string value)
         {
-
-            if(_condition==null || value.Contains(_condition)) //If the condition is null we've reached an else statement.
+            if (value != null) //This may happen at the end of the program.
             {
-                foreach (List<ConsoleSnifferAction> actions in _actions)
+                if (_condition == null || value.Contains(_condition)) //If the condition is null we've reached an else statement.
                 {
-                    bool conditionalMet = false;
-                    foreach (ConsoleSnifferAction action in actions)
+                    foreach (List<ConsoleSnifferAction> actions in _actions)
                     {
-                        if (action.IsConditional() && !conditionalMet)
+                        bool conditionalMet = false;
+                        foreach (ConsoleSnifferAction action in actions)
                         {
-                            conditionalMet = action.Execute(ref value);
-                        }
-                        else if (!action.IsConditional())
-                        {
-                            action.Execute(ref value);
+                            if (action.IsConditional() && !conditionalMet)
+                            {
+                                conditionalMet = action.Execute(ref value);
+                            }
+                            else if (!action.IsConditional())
+                            {
+                                action.Execute(ref value);
+                            }
                         }
                     }
+                    return true;
                 }
-                return true;
             }
 
             return false;
