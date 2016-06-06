@@ -13,12 +13,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace FriskoxD.ConsoleSniffer
 {
     using System.Diagnostics;
     class ConsoleSniffer
     {
+        internal const int CTRL_C_EVENT = 0;
+        [DllImport("kernel32.dll")]
+        internal static extern bool GenerateConsoleCtrlEvent(uint dwCtrlEvent, uint dwProcessGroupId);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern bool AttachConsole(uint dwProcessId);
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        internal static extern bool FreeConsole();
+        [DllImport("kernel32.dll")]
+        static extern bool SetConsoleCtrlHandler(ConsoleCtrlDelegate HandlerRoutine, bool Add);
+        // Delegate type to be used as the Handler Routine for SCCH
+        delegate Boolean ConsoleCtrlDelegate(uint CtrlType);
+
         static string _logLocation = null;
         static string _applicationLocation = null;
         static string _configurationLocation = null;
@@ -107,7 +120,6 @@ namespace FriskoxD.ConsoleSniffer
             if(_help)
             {
                 Console.Write(ConsoleSnifferText.helpOutput);
-
                 return; //Quit the program.
             }
 
@@ -153,7 +165,29 @@ namespace FriskoxD.ConsoleSniffer
 
             string input = "";
 
-            while(true)
+            Console.CancelKeyPress += delegate { //Because ctrl+c isn't caught in readline.
+                WriteLogLineTimed(ConsoleSnifferText.logOriginalInput + "ctrl+c");
+
+                FreeConsole();
+
+                if (AttachConsole((uint)_application.Id))
+                {
+                    SetConsoleCtrlHandler(null, true);
+                    try
+                    {
+                        GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
+                    }
+                    finally
+                    {
+                        FreeConsole();
+                        SetConsoleCtrlHandler(null, false);
+                    }
+                    AttachConsole((uint)Process.GetCurrentProcess().Id);
+                }
+
+            };
+
+            while (true)
             {
                 input = Console.ReadLine();
                 WriteLogLineTimed(ConsoleSnifferText.logOriginalInput + input);
