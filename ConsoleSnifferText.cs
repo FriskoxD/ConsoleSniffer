@@ -83,7 +83,7 @@ namespace FriskoxD.ConsoleSniffer
         public const string xmlBlockingOutputTag        = "blockingOutput";
         public const string xmlLogFileTag               = "logFile";
         public const string xmlInputManipulationTag     = "inputManipulation";
-        public const string xmlOutputManipulationTag    = "inputManipulation";
+        public const string xmlOutputManipulationTag    = "outputManipulation";
         public const string xmlIfTag                    = "if";
         public const string xmlElseIfTag                = "elseif";
         public const string xmlElseTag                  = "else";
